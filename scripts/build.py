@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.4
 #
 # Copyright 2014 wkhtmltopdf authors
 #
