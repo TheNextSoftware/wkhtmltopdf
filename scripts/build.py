@@ -1066,6 +1066,7 @@ def check_posix_local(config):
 
 def build_posix_local(config, basedir):
     version, simple_version = get_version(basedir)
+    version = version.replace("'", "")
 
     app    = os.path.join(basedir, config, 'app')
     qt     = os.path.join(basedir, config, 'qt')
@@ -1080,6 +1081,9 @@ def build_posix_local(config, basedir):
     mkdir_p(os.path.join(dist, 'include', 'wkhtmltox'))
     mkdir_p(os.path.join(dist, 'lib'))
 
+    if os.path.isdir("/usr/local/lib/qt4"):
+        shell('mv /usr/local/lib/qt4 /usr/local/lib/qt4.orig')
+
     build_qt(qt, '%s -j%d' % (make, CPU_COUNT),
         '%s/../qt/configure %s' % (basedir, qt_config('posix', '--prefix=%s' % qt)))
 
@@ -1092,6 +1096,9 @@ def build_posix_local(config, basedir):
     shell('cp -P bin/libwkhtmltox*.so.* ../wkhtmltox-%s/lib' % version)
     shell('cp ../../../include/wkhtmltox/*.h ../wkhtmltox-%s/include/wkhtmltox' % version)
     shell('cp ../../../include/wkhtmltox/dll*.inc ../wkhtmltox-%s/include/wkhtmltox' % version)
+
+    if os.path.isdir("/usr/local/lib/qt4"):
+        shell('mv /usr/local/lib/qt4 /usr/local/lib/qt4.orig')
 
     os.chdir(os.path.join(basedir, config))
     shell('tar -c -v -f ../wkhtmltox-%s_local-%s.tar wkhtmltox-%s/' % (version, platform.node(), version))
